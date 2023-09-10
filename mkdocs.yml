@@ -1,0 +1,20 @@
+site_name: Lab Documentation
+theme:
+  name: readthedocs
+
+
+nav:
+  - Home: 'index.md'
+  - 'Prometheus Lab':
+      - 'Part One - Design': 'prometheus/part-one.md'
+      - 'Part Two - Kube-Prometheus-Stack Install': 'prometheus/part-two.md'
+      - 'Part Three - Node-Exporter Install': 'prometheus/part-three.md'
+      - 'Part Four - Scrape Configuration': 'prometheus/part-four.md'
+      - 'Part Five - Visualising with Grafana': 'prometheus/part-five.md'
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+
