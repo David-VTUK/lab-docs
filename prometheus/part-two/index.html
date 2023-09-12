@@ -48,6 +48,16 @@
                   <li class="toctree-l1"><a class="reference internal" href="../part-one/">Part One - Design</a>
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="./">Part Two - Kube-Prometheus-Stack Install</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1-add-helm-chart-repo">1. Add Helm Chart Repo</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-prepare-valuesyaml">2. Prepare values.yaml</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-install-chart">3. Install Chart</a>
+    </li>
+    </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../part-three/">Part Three - Node-Exporter Install</a>
                   </li>
@@ -80,7 +90,96 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                
+                <h1 id="kube-prometheus-stack-install">Kube-prometheus Stack Install</h1>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><code>helm</code> CLI</li>
+<li><code>kubectl</code> CLI</li>
+<li><code>kubeconfig</code> file for the monitoring cluster</li>
+</ul>
+<h2 id="1-add-helm-chart-repo">1. Add Helm Chart Repo</h2>
+<pre class="highlight"><code class="language-bash">helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update</code></pre>
+<h2 id="2-prepare-valuesyaml">2. Prepare <code>values.yaml</code></h2>
+<pre class="highlight"><code class="language-yaml">alertmanager:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      cert-manager.io/cluster-issuer: letsencrypt-production
+    enabled: true
+    hosts:
+      - alertmanager-lab.virtualthoughts.co.uk
+    labels: {}
+    paths:
+      - /
+    tls:
+      - hosts:
+          - alertmanager-lab.virtualthoughts.co.uk
+        secretName: alertmanager-lab-tls
+    pathType: Prefix
+prometheus:
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 50Gi
+          selector:
+          volumeMode: Filesystem
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      cert-manager.io/cluster-issuer: letsencrypt-production
+    enabled: true
+    hosts:
+      - prometheus-lab.virtualthoughts.co.uk
+    labels: {}
+    paths:
+      - /
+    tls:
+      - hosts:
+          - prometheus-lab.virtualthoughts.co.uk
+        secretName: prometheus-lab-tls
+    pathType: Prefix
+grafana:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      cert-manager.io/cluster-issuer: letsencrypt-production
+    enabled: true
+    hosts:
+      - grafana-lab.virtualthoughts.co.uk
+    labels: {}
+    paths:
+      - /
+    tls:
+      - hosts:
+          - grafana-lab.virtualthoughts.co.uk
+        secretName: grafana-lab-tls
+    pathType: Prefix
+  persistence:
+    size: 5Gi
+    subPath: null
+    type: statefulset
+    enabled: true</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The values.yaml file provides a number of customisations:
+1. Expose Prometheus, Grafana and Alertmanager via Ingress Objects
+2. Enable persistent storage for Prometheus, Grafana and Alertmanager
+3. Use cert-manager to provision TLS certificates</p>
+</div>
+<h2 id="3-install-chart">3. Install Chart</h2>
+<pre class="highlight"><code class="language-bash">helm install prom-stack-lab prometheus-community/kube-prometheus-stack \
+  --namespace prom-stack \
+  --create-namespace \
+  -f values.yaml</code></pre>
               
             </div>
           </div><footer>
