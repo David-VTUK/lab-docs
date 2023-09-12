@@ -15,7 +15,7 @@
 | Memory (GB) | 6            | 6            | 6            |
 | Disk (GB)   | 80           | 80           | 80           |
 
-Kubernetes Version: `1.27.5`
+Kubernetes Version: `1.26`
 
 
 ## Monitoring Cluster
@@ -31,7 +31,7 @@ Kubernetes Version: `1.27.5`
 | Memory (GB) | 8            | 8            | 8            |
 | Disk (GB)   | 80           | 80           | 80           |
 
-Kubernetes Version: `1.27.5`
+Kubernetes Version: `1.26`
 
 !!! note
 
