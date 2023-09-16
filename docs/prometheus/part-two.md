@@ -87,10 +87,8 @@ grafana:
 
 !!! note
 
-    The values.yaml file provides a number of customisations:
-    1. Expose Prometheus, Grafana and Alertmanager via Ingress Objects
-    2. Enable persistent storage for Prometheus, Grafana and Alertmanager
-    3. Use cert-manager to provision TLS certificates
+    The values.yaml file provides a number of customisations. Namely leveraging cert-manager for TLS certificate
+    management, exposing Prometheus, Grafana and Alertmanager via Ingress, and enabling persistent storage.
 
 ## 3. Install Chart
 
