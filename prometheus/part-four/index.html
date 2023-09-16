@@ -52,6 +52,18 @@
                   <li class="toctree-l1"><a class="reference internal" href="../part-three/">Part Three - Node-Exporter Install</a>
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="./">Part Four - Scrape Configuration</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#additional-scrape-config">Additional Scrape config</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#create-secret">Create Secret</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#modify-prometheus-instance-with-additionalscrapeconfigs">Modify Prometheus Instance with additionalScrapeConfigs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#validate-scrape-config">Validate Scrape Config</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test-scrape-config">Test Scrape Config</a>
+    </li>
+    </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../part-five/">Part Five - Visualising with Grafana</a>
                   </li>
@@ -80,7 +92,54 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                
+                <h1 id="scrape-configuration">Scrape Configuration</h1>
+<p>Using the Prometheus Operator, <code>ServiceMonitor</code> and <code>PodMonitor</code> are standard abstractions for service discovery within
+a Kubernetes cluster. However, in this example we are scraping metrics directly exposed from nodes and not from a 
+Kubernetes service. </p>
+<p>Two ways to approach this include:</p>
+<ul>
+<li>Modifying the <code>Prometheus</code> yaml file and directly injecting additional scrape configs</li>
+<li>Modifying the <code>Prometheus</code> yaml file and reference an existing secret with <code>additionalScrapeConfigs</code></li>
+</ul>
+<p>For this example, the latter is used as a provides a less error-prone and scalable way to manage additional scrape configurations</p>
+<h2 id="additional-scrape-config">Additional Scrape config</h2>
+<pre class="highlight"><code class="language-yaml">- job_name: 'workload-cluster-nodes'
+  static_configs:
+  - targets:
+    - '172.16.30.79:9100'
+    - '172.16.30.80:9100'
+    - '172.16.30.78:9100'
+    labels:
+      cluster: 'workload-cluster'</code></pre>
+<h2 id="create-secret">Create Secret</h2>
+<p><code>kubectl create secret generic additional-scrape-configs --from-file=node-exporter-scrape.yaml --dry-run=client -oyaml &gt; additional-scrape-configs.yaml</code></p>
+<h2 id="modify-prometheus-instance-with-additionalscrapeconfigs">Modify Prometheus Instance with <code>additionalScrapeConfigs</code></h2>
+<pre class="highlight"><code class="language-yaml">apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  labels:
+    app: kube-prometheus-stack-prometheus
+    app.kubernetes.io/instance: prom-stack-lab
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    app.kubernetes.io/version: 51.0.2
+    chart: kube-prometheus-stack-51.0.2
+    heritage: Helm
+    release: prom-stack-lab
+  name: prom-stack-lab-kube-promet-prometheus
+  namespace: prom-stack
+spec:
+  additionalScrapeConfigs:
+    key: node-exporter-scrape.yaml
+    name: additional-scrape-configs</code></pre>
+<p>Which results in the following:</p>
+<p><img alt="img.png" src="../../Images/scrape-config.png" /></p>
+<h2 id="validate-scrape-config">Validate Scrape Config</h2>
+<p>From the Prometheus UI, we can validate the scrape configuration:</p>
+<p><img alt="img.png" src="../../Images/scrape.png" /></p>
+<p>From the Prometheus UI, we can validate metrics have been scraped with a simple <code>PromQL</code> query:</p>
+<h2 id="test-scrape-config">Test Scrape Config</h2>
+<p><img alt="img.png" src="../../Images/prom-query.png" /></p>
               
             </div>
           </div><footer>
