@@ -58,6 +58,10 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#cpus-per-node">CPU's per node:</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ram-amount-in-gb-per-node">RAM amount in GB Per Node</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ram-amount-in-gb-per-cpu">RAM amount in GB per CPU</a>
+    </li>
     </ul>
                   </li>
               </ul>
@@ -86,6 +90,7 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="recording-rules">Recording Rules</h1>
+<p>Recording rules enable us to precompute frequently used expressions and save their result as a new time series.</p>
 <h2 id="cpus-per-node">CPU's per node:</h2>
 <pre class="highlight"><code class="language-yaml">apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
@@ -98,6 +103,7 @@ spec:
       rules:
         - record: lab_node:total_cpu_count
           expr: count without(cpu, mode) (node_cpu_seconds_total{mode="idle", cluster="workload-cluster"})</code></pre>
+<h2 id="ram-amount-in-gb-per-node">RAM amount in GB Per Node</h2>
 <pre class="highlight"><code class="language-yaml">apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -109,6 +115,7 @@ spec:
       rules:
         - record: lab_node:total_memory_gb
           expr: (node_memory_MemTotal_bytes{cluster="workload-cluster"} / 1024^3)</code></pre>
+<h2 id="ram-amount-in-gb-per-cpu">RAM amount in GB per CPU</h2>
 <pre class="highlight"><code class="language-yaml">apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
