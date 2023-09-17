@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../custom.css" rel="stylesheet" />
     
       <script>
         // Current page data
@@ -87,7 +88,12 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="high-level-design">High Level Design</h1>
-<p><img alt="Prometheus-Architecture.drawio.png" src="../../Images/Prometheus-Architecture.drawio.png" /></p>
+<p>Two clusters will be leveragged for this lab</p>
+<ol>
+<li>A dedicated Kubernetes cluster for the <code>kube-prometheus</code> stack.</li>
+<li>A Kubernetes cluster with nodes running <code>node-exporter</code> which the monitoring cluster will scrape.</li>
+</ol>
+<p><img alt="img.png" src="../../Images/prometheus-architecture.png" /></p>
 <h2 id="workload-cluster">Workload Cluster</h2>
 <ul>
 <li>The workload cluster is used to host end-user applications.</li>
@@ -133,9 +139,9 @@
 <p>Kubernetes Version: <code>1.26</code></p>
 <h2 id="monitoring-cluster">Monitoring Cluster</h2>
 <ul>
-<li>The monitoring cluster is used to host the <code>kube-prometheus</code> stack</li>
-<li><code>kube-prometheus</code> leverages the Prometheus Operator</li>
-<li>A <code>servicemonitor</code> object will be used to scrape metrics from each of the node-exporter endpoints</li>
+<li>The monitoring cluster is used to host the <code>kube-prometheus</code> stack.</li>
+<li><code>kube-prometheus</code> leverages the Prometheus Operator.</li>
+<li>A specific scrape configuration will be used to scrape for external <code>node-exporter</code> metrics.</li>
 </ul>
 <table>
 <thead>
