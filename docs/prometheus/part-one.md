@@ -1,6 +1,11 @@
 # High Level Design
 
-![Prometheus-Architecture.drawio.png](..%2FImages%2FPrometheus-Architecture.drawio.png)
+Two clusters will be leveragged for this lab
+
+1. A dedicated Kubernetes cluster for the `kube-prometheus` stack.
+2. A Kubernetes cluster with nodes running `node-exporter` which the monitoring cluster will scrape.
+
+![img.png](../Images/prometheus-architecture.png)
 
 ## Workload Cluster
 
@@ -20,9 +25,9 @@ Kubernetes Version: `1.26`
 
 ## Monitoring Cluster
 
-* The monitoring cluster is used to host the `kube-prometheus` stack
-* `kube-prometheus` leverages the Prometheus Operator
-* A `servicemonitor` object will be used to scrape metrics from each of the node-exporter endpoints
+* The monitoring cluster is used to host the `kube-prometheus` stack.
+* `kube-prometheus` leverages the Prometheus Operator.
+* A specific scrape configuration will be used to scrape for external `node-exporter` metrics.
 
 |             | Node 1       | Node 2       | Node 2       |
 |-------------|--------------|--------------|--------------|

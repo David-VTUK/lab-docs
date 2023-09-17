@@ -1,8 +1,7 @@
 # Scrape Configuration
 
 Using the Prometheus Operator, `ServiceMonitor` and `PodMonitor` are standard abstractions for service discovery within
-a Kubernetes cluster. However, in this example we are scraping metrics directly exposed from nodes and not from a 
-Kubernetes service. 
+a Kubernetes cluster. However, in this example we are scraping metrics directly exposed from nodes from an external cluster.
 
 Two ways to approach this include:
 
@@ -12,6 +11,10 @@ Two ways to approach this include:
 For this example, the latter is used as a provides a less error-prone and scalable way to manage additional scrape configurations
 
 ##  Additional Scrape config
+
+This scrape configuration references the three nodes in the Workload cluster. In addition, a label is automatically created 
+that identifies the cluster these nodes reside in. This is helpful to distinguish these metrics from other nodes that may be scraped
+for similar metrics in the future.
 
 ```yaml
 - job_name: 'workload-cluster-nodes'
@@ -29,6 +32,8 @@ For this example, the latter is used as a provides a less error-prone and scalab
 `kubectl create secret generic additional-scrape-configs --from-file=node-exporter-scrape.yaml --dry-run=client -oyaml > additional-scrape-configs.yaml`
 
 ## Modify Prometheus Instance with `additionalScrapeConfigs`
+
+To include this scrape configuration we need to modify the corresponding `Prometheus` object
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
@@ -51,13 +56,13 @@ spec:
     name: additional-scrape-configs
 ```
 
-Which results in the following:
+We can visualise this configuration with the following:
 
 ![img.png](../Images/scrape-config.png)
 
 ## Validate Scrape Config
 
-From the Prometheus UI, we can validate the scrape configuration:
+From the Prometheus UI, we can validate the scrape configuration is configured and working as expected:
 
 ![img.png](../Images/scrape.png)
 

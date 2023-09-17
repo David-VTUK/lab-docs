@@ -53,6 +53,12 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1-add-helm-chart-repo">1. Add Helm Chart Repo</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-prepare-valuesyaml">2. Prepare values.yaml</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-install-chart">3. Install Chart</a>
+    </li>
     </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../part-four/">Part Four - Scrape Configuration</a>
@@ -91,6 +97,22 @@
 <li><code>kubectl</code> CLI</li>
 <li><code>kubeconfig</code> file for the monitoring cluster</li>
 </ul>
+<h2 id="1-add-helm-chart-repo">1. Add Helm Chart Repo</h2>
+<pre class="highlight"><code class="language-bash">helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update</code></pre>
+<h2 id="2-prepare-valuesyaml">2. Prepare <code>values.yaml</code></h2>
+<pre class="highlight"><code class="language-yaml">service:
+  enabled: true
+  type: NodePort
+  port: 9100
+  targetPort: 9100
+  nodePort:
+  portName: metrics</code></pre>
+<h2 id="3-install-chart">3. Install Chart</h2>
+<pre class="highlight"><code class="language-bash">helm install prom-stack-node-exporter prometheus-community/prometheus-node-exporter \
+--namespace prom-stack \
+--create-namespace \
+-f values.yaml</code></pre>
               
             </div>
           </div><footer>

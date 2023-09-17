@@ -15,6 +15,8 @@ helm repo update
 
 ## 2. Prepare `values.yaml`
 
+For this install, each node will expose the `node-exporter` metrics endpoint as a `nodeport` service type.
+
 ```yaml
 service:
   enabled: true
@@ -26,6 +28,8 @@ service:
 ```
 
 ## 3. Install Chart
+
+Install `node-exporter` leveraging the customisations specified in the previous step.
 
 ```bash
 helm install prom-stack-node-exporter prometheus-community/prometheus-node-exporter \

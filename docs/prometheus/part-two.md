@@ -25,7 +25,6 @@ alertmanager:
     enabled: true
     hosts:
       - alertmanager-lab.virtualthoughts.co.uk
-    labels: {}
     paths:
       - /
     tls:
@@ -53,7 +52,6 @@ prometheus:
     enabled: true
     hosts:
       - prometheus-lab.virtualthoughts.co.uk
-    labels: {}
     paths:
       - /
     tls:
@@ -70,7 +68,6 @@ grafana:
     enabled: true
     hosts:
       - grafana-lab.virtualthoughts.co.uk
-    labels: {}
     paths:
       - /
     tls:
