@@ -1,5 +1,7 @@
 # Recording Rules 
 
+Recording rules enable us to precompute frequently used expressions and save their result as a new time series.
+
 ## CPU's per node:
 
 ```yaml
@@ -16,6 +18,8 @@ spec:
           expr: count without(cpu, mode) (node_cpu_seconds_total{mode="idle", cluster="workload-cluster"})
 ```
 
+## RAM amount in GB Per Node
+
 ```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
@@ -29,6 +33,8 @@ spec:
         - record: lab_node:total_memory_gb
           expr: (node_memory_MemTotal_bytes{cluster="workload-cluster"} / 1024^3)
 ```
+
+## RAM amount in GB per CPU
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1

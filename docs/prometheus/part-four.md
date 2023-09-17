@@ -1,14 +1,14 @@
 # Scrape Configuration
 
 Using the Prometheus Operator, `ServiceMonitor` and `PodMonitor` are standard abstractions for service discovery within
-a Kubernetes cluster. However, in this example we are scraping metrics directly exposed from nodes from an external cluster.
+a Kubernetes cluster. However, in this example, we are scraping metrics from external nodes.
 
 Two ways to approach this include:
 
 * Modifying the `Prometheus` yaml file and directly injecting additional scrape configs
 * Modifying the `Prometheus` yaml file and reference an existing secret with `additionalScrapeConfigs`
 
-For this example, the latter is used as a provides a less error-prone and scalable way to manage additional scrape configurations
+For this example, the latter is used as a provides a less error-prone and scalable way to manage additional scrape configurations.
 
 ##  Additional Scrape config
 
@@ -33,23 +33,11 @@ for similar metrics in the future.
 
 ## Modify Prometheus Instance with `additionalScrapeConfigs`
 
-To include this scrape configuration we need to modify the corresponding `Prometheus` object
+To include this scrape configuration we need to modify the corresponding `Prometheus` object:
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
-metadata:
-  labels:
-    app: kube-prometheus-stack-prometheus
-    app.kubernetes.io/instance: prom-stack-lab
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 51.0.2
-    chart: kube-prometheus-stack-51.0.2
-    heritage: Helm
-    release: prom-stack-lab
-  name: prom-stack-lab-kube-promet-prometheus
-  namespace: prom-stack
 spec:
   additionalScrapeConfigs:
     key: node-exporter-scrape.yaml
@@ -71,4 +59,3 @@ From the Prometheus UI, we can validate metrics have been scraped with a simple 
 ## Test Scrape Config
 
 ![img.png](../Images/prom-query.png)
-

@@ -10,8 +10,8 @@ Two clusters will be leveraged for this lab:
 ## Workload Cluster
 
 * The workload cluster is used to host end-user applications.
-* Each worker node will have `node-exporter` installed for the purpose of exposing metrics
-* Three nodes comprise the cluster, each hosting `etcd`, `control plane` and `worker` roles
+* Each worker node will have `node-exporter` installed for the purpose of exposing metrics.
+* Three nodes comprise the cluster, each hosting `etcd`, `control plane` and `worker` roles.
 
 |             | Node 1       | Node 2       | Node 2       |
 |-------------|--------------|--------------|--------------|
@@ -21,7 +21,6 @@ Two clusters will be leveraged for this lab:
 | Disk (GB)   | 80           | 80           | 80           |
 
 Kubernetes Version: `1.26`
-
 
 ## Monitoring Cluster
 

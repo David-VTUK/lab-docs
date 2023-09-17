@@ -8,6 +8,8 @@
 
 ## 1. Add Helm Chart Repo
 
+The same helm repo used earlier also accommodates the node-exporter chart.
+
 ```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
@@ -15,7 +17,8 @@ helm repo update
 
 ## 2. Prepare `values.yaml`
 
-For this install, each node will expose the `node-exporter` metrics endpoint as a `nodeport` service type.
+For this install, each node will expose the `node-exporter` metrics endpoint as a `nodeport` service type, so we can have
+external access to these metrics as required by the monitoring cluster.
 
 ```yaml
 service:

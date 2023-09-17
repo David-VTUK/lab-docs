@@ -8,6 +8,8 @@
 
 ## 1. Add Helm Chart Repo
 
+This will be used to install the `kube-prometheus` stack.
+
 ```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
@@ -88,6 +90,8 @@ grafana:
     management, exposing Prometheus, Grafana and Alertmanager via Ingress, and enabling persistent storage.
 
 ## 3. Install Chart
+
+With the customisations complete, these will be used to customise the installation. 
 
 ```bash
 helm install prom-stack-lab prometheus-community/kube-prometheus-stack \
