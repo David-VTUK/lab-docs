@@ -99,6 +99,7 @@
 <li><code>kubeconfig</code> file for the monitoring cluster</li>
 </ul>
 <h2 id="1-add-helm-chart-repo">1. Add Helm Chart Repo</h2>
+<p>This will be used to install the <code>kube-prometheus</code> stack.</p>
 <pre class="highlight"><code class="language-bash">helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update</code></pre>
 <h2 id="2-prepare-valuesyaml">2. Prepare <code>values.yaml</code></h2>
@@ -172,6 +173,7 @@ grafana:
 management, exposing Prometheus, Grafana and Alertmanager via Ingress, and enabling persistent storage.</p>
 </div>
 <h2 id="3-install-chart">3. Install Chart</h2>
+<p>With the customisations complete, these will be used to customise the installation. </p>
 <pre class="highlight"><code class="language-bash">helm install prom-stack-lab prometheus-community/kube-prometheus-stack \
   --namespace prom-stack \
   --create-namespace \

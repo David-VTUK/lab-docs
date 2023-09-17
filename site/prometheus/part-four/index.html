@@ -95,13 +95,13 @@
               
                 <h1 id="scrape-configuration">Scrape Configuration</h1>
 <p>Using the Prometheus Operator, <code>ServiceMonitor</code> and <code>PodMonitor</code> are standard abstractions for service discovery within
-a Kubernetes cluster. However, in this example we are scraping metrics directly exposed from nodes from an external cluster.</p>
+a Kubernetes cluster. However, in this example, we are scraping metrics from external nodes.</p>
 <p>Two ways to approach this include:</p>
 <ul>
 <li>Modifying the <code>Prometheus</code> yaml file and directly injecting additional scrape configs</li>
 <li>Modifying the <code>Prometheus</code> yaml file and reference an existing secret with <code>additionalScrapeConfigs</code></li>
 </ul>
-<p>For this example, the latter is used as a provides a less error-prone and scalable way to manage additional scrape configurations</p>
+<p>For this example, the latter is used as a provides a less error-prone and scalable way to manage additional scrape configurations.</p>
 <h2 id="additional-scrape-config">Additional Scrape config</h2>
 <p>This scrape configuration references the three nodes in the Workload cluster. In addition, a label is automatically created 
 that identifies the cluster these nodes reside in. This is helpful to distinguish these metrics from other nodes that may be scraped
@@ -117,21 +117,9 @@ for similar metrics in the future.</p>
 <h2 id="create-secret">Create Secret</h2>
 <p><code>kubectl create secret generic additional-scrape-configs --from-file=node-exporter-scrape.yaml --dry-run=client -oyaml &gt; additional-scrape-configs.yaml</code></p>
 <h2 id="modify-prometheus-instance-with-additionalscrapeconfigs">Modify Prometheus Instance with <code>additionalScrapeConfigs</code></h2>
-<p>To include this scrape configuration we need to modify the corresponding <code>Prometheus</code> object</p>
+<p>To include this scrape configuration we need to modify the corresponding <code>Prometheus</code> object:</p>
 <pre class="highlight"><code class="language-yaml">apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
-metadata:
-  labels:
-    app: kube-prometheus-stack-prometheus
-    app.kubernetes.io/instance: prom-stack-lab
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 51.0.2
-    chart: kube-prometheus-stack-51.0.2
-    heritage: Helm
-    release: prom-stack-lab
-  name: prom-stack-lab-kube-promet-prometheus
-  namespace: prom-stack
 spec:
   additionalScrapeConfigs:
     key: node-exporter-scrape.yaml

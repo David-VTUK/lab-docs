@@ -99,10 +99,12 @@
 <li><code>kubeconfig</code> file for the monitoring cluster</li>
 </ul>
 <h2 id="1-add-helm-chart-repo">1. Add Helm Chart Repo</h2>
+<p>The same helm repo used earlier also accommodates the node-exporter chart.</p>
 <pre class="highlight"><code class="language-bash">helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update</code></pre>
 <h2 id="2-prepare-valuesyaml">2. Prepare <code>values.yaml</code></h2>
-<p>For this install, each node will expose the <code>node-exporter</code> metrics endpoint as a <code>nodeport</code> service type.</p>
+<p>For this install, each node will expose the <code>node-exporter</code> metrics endpoint as a <code>nodeport</code> service type, so we can have
+external access to these metrics as required by the monitoring cluster.</p>
 <pre class="highlight"><code class="language-yaml">service:
   enabled: true
   type: NodePort

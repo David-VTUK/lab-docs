@@ -29,7 +29,10 @@ for similar metrics in the future.
 
 ## Create Secret
 
-`kubectl create secret generic additional-scrape-configs --from-file=node-exporter-scrape.yaml --dry-run=client -oyaml > additional-scrape-configs.yaml`
+```bash
+kubectl create secret generic additional-scrape-configs --from-file=node-exporter-scrape.yaml --dry-run=client -oyaml > additional-scrape-configs.yaml
+kubectl apply -f additional-scrape.yaml
+```
 
 ## Modify Prometheus Instance with `additionalScrapeConfigs`
 
