@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../custom.css" rel="stylesheet" />
     
       <script>
         // Current page data
@@ -55,6 +56,8 @@
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="./">Part Five - Visualising with Grafana</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#cpus-per-node">CPU's per node:</a>
+    </li>
     </ul>
                   </li>
               </ul>
@@ -82,7 +85,44 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="visualising-with-grafana">Visualising with Grafana</h1>
+                <h1 id="recording-rules">Recording Rules</h1>
+<h2 id="cpus-per-node">CPU's per node:</h2>
+<pre class="highlight"><code class="language-yaml">apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: node-cpu-count-recording-rule
+  namespace: prom-stack
+spec:
+  groups:
+    - name: node-cpu-count-group
+      rules:
+        - record: lab_node:total_cpu_count
+          expr: count without(cpu, mode) (node_cpu_seconds_total{mode="idle", cluster="workload-cluster"})</code></pre>
+<pre class="highlight"><code class="language-yaml">apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: node-total-mem-gb
+  namespace: prom-stack
+spec:
+  groups:
+    - name: node-total-mem-gb
+      rules:
+        - record: lab_node:total_memory_gb
+          expr: (node_memory_MemTotal_bytes{cluster="workload-cluster"} / 1024^3)</code></pre>
+<pre class="highlight"><code class="language-yaml">apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: node-mem-per-cpu
+  namespace: prom-stack
+spec:
+  groups:
+    - name: node-mem-per-cpu
+      rules:
+        - record: lab_node:mem_per_cpu_bytes
+          expr: node_memory_Percpu_bytes{cluster="workload-cluster"}</code></pre>
+<h1 id="visualising-with-grafana">Visualising with Grafana</h1>
+<p>Example of basic graphs leveraging the above recording rules:</p>
+<p><img alt="img_1.png" src="../../Images/grafana-basic.png" /></p>
               
             </div>
           </div><footer>

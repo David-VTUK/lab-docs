@@ -1,6 +1,6 @@
 # High Level Design
 
-Two clusters will be leveragged for this lab
+Two clusters will be leveraged for this lab:
 
 1. A dedicated Kubernetes cluster for the `kube-prometheus` stack.
 2. A Kubernetes cluster with nodes running `node-exporter` which the monitoring cluster will scrape.
@@ -32,7 +32,7 @@ Kubernetes Version: `1.26`
 |             | Node 1       | Node 2       | Node 2       |
 |-------------|--------------|--------------|--------------|
 | OS          | Ubuntu 22.04 | Ubuntu 22.04 | Ubuntu 22.04 |
-| CPU         | 2            | 2            | 2            |
+| CPU         | 4            | 4            | 4            |
 | Memory (GB) | 8            | 8            | 8            |
 | Disk (GB)   | 80           | 80           | 80           |
 
