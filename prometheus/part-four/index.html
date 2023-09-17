@@ -115,7 +115,8 @@ for similar metrics in the future.</p>
     labels:
       cluster: 'workload-cluster'</code></pre>
 <h2 id="create-secret">Create Secret</h2>
-<p><code>kubectl create secret generic additional-scrape-configs --from-file=node-exporter-scrape.yaml --dry-run=client -oyaml &gt; additional-scrape-configs.yaml</code></p>
+<pre class="highlight"><code class="language-bash">kubectl create secret generic additional-scrape-configs --from-file=node-exporter-scrape.yaml --dry-run=client -oyaml &gt; additional-scrape-configs.yaml
+kubectl apply -f additional-scrape.yaml</code></pre>
 <h2 id="modify-prometheus-instance-with-additionalscrapeconfigs">Modify Prometheus Instance with <code>additionalScrapeConfigs</code></h2>
 <p>To include this scrape configuration we need to modify the corresponding <code>Prometheus</code> object:</p>
 <pre class="highlight"><code class="language-yaml">apiVersion: monitoring.coreos.com/v1
