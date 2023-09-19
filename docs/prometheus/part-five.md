@@ -10,6 +10,8 @@ kind: PrometheusRule
 metadata:
   name: node-cpu-count-recording-rule
   namespace: prom-stack
+  labels:
+    release: prom-stack-lab
 spec:
   groups:
     - name: node-cpu-count-group
@@ -26,6 +28,8 @@ kind: PrometheusRule
 metadata:
   name: node-total-mem-gb
   namespace: prom-stack
+  labels:
+    release: prom-stack-lab
 spec:
   groups:
     - name: node-total-mem-gb
@@ -34,24 +38,26 @@ spec:
           expr: (node_memory_MemTotal_bytes{cluster="workload-cluster"} / 1024^3)
 ```
 
-## RAM amount in GB per CPU
+## Ratio of CPU:RAM
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: node-mem-per-cpu
+  name: node-mem-cpu-ratio
   namespace: prom-stack
+  labels:
+    release: prom-stack-lab
 spec:
   groups:
-    - name: node-mem-per-cpu
+    - name: node-mem-cpu-ratio
       rules:
-        - record: lab_node:mem_per_cpu_bytes
-          expr: node_memory_Percpu_bytes{cluster="workload-cluster"}
+        - record: lab_node:mem_cpu_ratio
+          expr: (node_memory_MemTotal_bytes{cluster="workload-cluster"} / 1024^3) / count without(cpu, mode) (node_cpu_seconds_total{mode="idle", cluster="workload-cluster"})
 ```
 
 # Visualising with Grafana
 
 Example of basic graphs leveraging the above recording rules:
 
-![img_1.png](../Images/grafana-basic.png)
+![img.png](../Images/grafana-dashboard.png)
