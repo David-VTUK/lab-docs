@@ -60,7 +60,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#ram-amount-in-gb-per-node">RAM amount in GB Per Node</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#ram-amount-in-gb-per-cpu">RAM amount in GB per CPU</a>
+    <li class="toctree-l2"><a class="reference internal" href="#ratio-of-cpuram">Ratio of CPU:RAM</a>
     </li>
     </ul>
                   </li>
@@ -97,6 +97,8 @@ kind: PrometheusRule
 metadata:
   name: node-cpu-count-recording-rule
   namespace: prom-stack
+  labels:
+    release: prom-stack-lab
 spec:
   groups:
     - name: node-cpu-count-group
@@ -109,27 +111,31 @@ kind: PrometheusRule
 metadata:
   name: node-total-mem-gb
   namespace: prom-stack
+  labels:
+    release: prom-stack-lab
 spec:
   groups:
     - name: node-total-mem-gb
       rules:
         - record: lab_node:total_memory_gb
           expr: (node_memory_MemTotal_bytes{cluster="workload-cluster"} / 1024^3)</code></pre>
-<h2 id="ram-amount-in-gb-per-cpu">RAM amount in GB per CPU</h2>
+<h2 id="ratio-of-cpuram">Ratio of CPU:RAM</h2>
 <pre class="highlight"><code class="language-yaml">apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: node-mem-per-cpu
+  name: node-mem-cpu-ratio
   namespace: prom-stack
+  labels:
+    release: prom-stack-lab
 spec:
   groups:
-    - name: node-mem-per-cpu
+    - name: node-mem-cpu-ratio
       rules:
-        - record: lab_node:mem_per_cpu_bytes
-          expr: node_memory_Percpu_bytes{cluster="workload-cluster"}</code></pre>
+        - record: lab_node:mem_cpu_ratio
+          expr: (node_memory_MemTotal_bytes{cluster="workload-cluster"} / 1024^3) / count without(cpu, mode) (node_cpu_seconds_total{mode="idle", cluster="workload-cluster"})</code></pre>
 <h1 id="visualising-with-grafana">Visualising with Grafana</h1>
 <p>Example of basic graphs leveraging the above recording rules:</p>
-<p><img alt="img_1.png" src="../../Images/grafana-basic.png" /></p>
+<p><img alt="img.png" src="../../Images/grafana-dashboard.png" /></p>
               
             </div>
           </div><footer>
